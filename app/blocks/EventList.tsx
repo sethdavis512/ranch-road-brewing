@@ -3,11 +3,11 @@ import { Container, CtaLink, SectionHeading } from '~/components/primitives';
 import { formatEventWhen } from '~/lib/events';
 import type { EventKind, EventListBlock } from './types';
 
-const kindBadge: Record<EventKind, 'longhorn' | 'bluebonnet' | 'prickly-pear' | 'pecan' | 'sky'> = {
+const kindBadge: Record<EventKind, 'longhorn' | 'bluebonnet' | 'prickly-pear' | 'outline'> = {
     'Live music': 'longhorn',
     Release: 'prickly-pear',
     Trivia: 'bluebonnet',
-    Market: 'sky',
+    Market: 'outline',
     Food: 'longhorn',
     Community: 'bluebonnet'
 };
