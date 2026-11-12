@@ -35,7 +35,8 @@ export type ContentTypeDef = {
 };
 
 const symbol = (id: string, name: string, extra: Partial<Field> = {}): Field => ({ id, name, type: 'Symbol', ...extra });
-const text = (id: string, name: string, extra: Partial<Field> = {}): Field => ({ id, name, type: 'Text', ...extra });
+// Plain textarea, not Contentful's default Markdown editor: these are a sentence or two.
+const text = (id: string, name: string, extra: Partial<Field> = {}): Field => ({ id, name, type: 'Text', widget: 'multipleLine', ...extra });
 const oneOf = (values: readonly string[]) => [{ in: [...values] }];
 const image = (id: string, name: string, help?: string): Field => ({ id, name, type: 'Link', linkType: 'Asset', help, validations: [{ linkMimetypeGroup: ['image'] }] });
 const cta = (prefix: string, label: string): Field[] => [
@@ -62,8 +63,9 @@ const blocks: Record<BlockType, ContentTypeDef> = {
     factStrip: {
         name: 'Block: Fact strip',
         description: 'A row of quick facts.',
-        displayField: 'facts',
+        displayField: 'title',
         fields: [
+            symbol('title', 'Internal name', { help: 'Only shown in Contentful, to tell strips apart.' }),
             {
                 id: 'facts',
                 name: 'Facts',
