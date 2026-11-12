@@ -1,15 +1,205 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+/* lone-star-ui's `dark:` variant is class based; the theme script in root.tsx
+   sets `.dark` from the visitor's choice or their system preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+    --font-sans:
+        'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji';
+    --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+    --font-serif: 'Instrument Serif', Georgia, serif;
+
+    --text-poster: clamp(3.75rem, 11vw, 10.5rem);
+    --text-poster--line-height: 0.86;
+    --text-display: clamp(2.75rem, 6.5vw, 5.5rem);
+    --text-display--line-height: 0.9;
+    --text-title: clamp(1.9rem, 3.6vw, 3rem);
+    --text-title--line-height: 0.95;
+
+    --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Palette tokens: values live in the :root block below. */
+    --color-ink: var(--ink);
+    --color-surface: var(--surface);
+    --color-mesa: var(--mesa);
+    --color-pecan: var(--pecan);
+    --color-longhorn: var(--longhorn);
+    --color-bluebonnet: var(--bluebonnet);
+    --color-sky: var(--sky);
+    --color-prickly-pear: var(--prickly-pear);
+
+    /* Fixed, theme-independent tones for text set over photographs. */
+    --color-paper: oklch(96% 0.02 85);
+    --color-night: oklch(17% 0.02 60);
+    /* Highway-sign green and center-line yellow: fixed, like real paint. */
+    --color-sign: oklch(42% 0.09 158);
+    --color-stripe: oklch(82% 0.16 88);
+
+    /* Beer colors, roughly along the SRM scale. Data, not theme. */
+    --color-beer-straw: oklch(88% 0.13 95);
+    --color-beer-gold: oklch(80% 0.16 80);
+    --color-beer-amber: oklch(68% 0.16 60);
+    --color-beer-copper: oklch(58% 0.15 45);
+    --color-beer-ruby: oklch(50% 0.17 20);
+    --color-beer-brown: oklch(40% 0.08 50);
+    --color-beer-black: oklch(22% 0.03 50);
 }
 
-html,
-body {
-  @apply bg-white dark:bg-gray-950;
+/*
+ * The palette: lone-star-ui's tokens, re-tuned for a taproom on a Hill
+ * Country ranch road. Each resolves per theme through light-dark(), driven by
+ * `color-scheme`. surface/mesa: limestone by day, cedar smoke by night.
+ * longhorn: rusted corrugated metal. bluebonnet/sky: highway-sign green.
+ */
+:root {
+    color-scheme: light;
+    --font-slab: var(--font-display);
 
-  @media (prefers-color-scheme: dark) {
+    --ink: light-dark(oklch(25% 0.03 55), oklch(93% 0.018 85));
+    --surface: light-dark(oklch(95.5% 0.02 85), oklch(19% 0.018 60));
+    --mesa: light-dark(oklch(90.5% 0.03 80), oklch(24.5% 0.022 60));
+    --pecan: light-dark(oklch(44% 0.04 55), oklch(77% 0.035 75));
+    --longhorn: light-dark(oklch(48% 0.14 40), oklch(71% 0.14 50));
+    --bluebonnet: light-dark(oklch(42% 0.09 158), oklch(76% 0.1 158));
+    --sky: light-dark(oklch(80% 0.08 158), oklch(40% 0.07 158));
+    --prickly-pear: light-dark(oklch(50% 0.17 355), oklch(74% 0.14 355));
+}
+
+:root.dark {
     color-scheme: dark;
-  }
+}
+
+/*
+ * lone-star-ui's stylesheet sets its own --color-* values in an unlayered
+ * `.dark` rule, which beats Tailwind's theme layer. Its components read those
+ * variables, so point them back at this palette. Unlayered and later in the
+ * cascade, this wins in both themes.
+ */
+:root,
+.dark {
+    --color-ink: var(--ink);
+    --color-surface: var(--surface);
+    --color-mesa: var(--mesa);
+    --color-pecan: var(--pecan);
+    --color-longhorn: var(--longhorn);
+    --color-bluebonnet: var(--bluebonnet);
+    --color-sky: var(--sky);
+    --color-prickly-pear: var(--prickly-pear);
+}
+
+body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Paper grain over the limestone, so flat fills read as printed stock. */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+:root.dark body::before {
+    opacity: 0.05;
+}
+
+::selection {
+    background: var(--longhorn);
+    color: var(--surface);
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-longhorn);
+    outline-offset: 3px;
+}
+
+/* Page-load reveal: the poster heading rises into place. */
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(0.35em);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@utility animate-rise {
+    animation: rise 0.9s var(--ease-out-quint) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Long-form CMS rich text (no typography plugin installed). */
+.rich-text {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+}
+
+.rich-text > * + * {
+    margin-top: 1.1em;
+}
+
+.rich-text a {
+    color: var(--color-longhorn);
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 3px;
+}
+
+.rich-text h2,
+.rich-text h3 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.95;
+    margin-top: 1.6em;
+}
+
+.rich-text h2 {
+    font-size: 2rem;
+}
+
+.rich-text h3 {
+    font-size: 1.5rem;
+}
+
+.rich-text ul,
+.rich-text ol {
+    padding-left: 1.25em;
+}
+
+.rich-text ul {
+    list-style: square;
+}
+
+.rich-text ol {
+    list-style: decimal;
+}
+
+.rich-text li + li {
+    margin-top: 0.35em;
+}
+
+.rich-text blockquote {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    line-height: 1.25;
+    color: var(--color-pecan);
 }

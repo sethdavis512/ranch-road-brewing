@@ -1,29 +1,37 @@
 {
-  "name": "users-seth-repositories-stay-humble-be-contentful",
+  "name": "ranch-road-brewing",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "test": "vitest run",
+    "cms:setup": "bun scripts/setup-contentful.ts"
   },
   "dependencies": {
-    "@react-router/node": "7.15.1",
-    "@react-router/serve": "7.15.1",
-    "isbot": "^5.1.36",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-router": "7.15.1"
+    "@contentful/rich-text-react-renderer": "^16.2.2",
+    "@contentful/rich-text-types": "^17.2.7",
+    "@react-router/node": "8.5.1",
+    "@react-router/serve": "8.5.1",
+    "contentful": "^11.12.10",
+    "isbot": "^5.2.3",
+    "lone-star-ui": "^0.11.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router": "8.5.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@react-router/dev": "7.15.1",
-    "@tailwindcss/vite": "^4.2.2",
-    "@types/node": "^22",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "tailwindcss": "^4.2.2",
-    "typescript": "^5.9.3",
-    "vite": "^8.0.3"
+    "@react-router/dev": "8.5.1",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
   }
 }
